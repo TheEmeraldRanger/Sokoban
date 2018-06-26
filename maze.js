@@ -11,7 +11,8 @@ let avatarRow;
 let avatarCol;
 
 // Separate array for keeping track of the moving crates.
-const crates = [];
+const crateRow = [];
+const crateCol = [];
 
 // START HERE -----------------------------------------------------------------/
 // While the maze project only kept track of (W)alls, the player's
@@ -66,7 +67,8 @@ for(var row=0; row<map.length; row++){
 // and positioning it at a specified row/column in the grid.
 function crate(row, col) {
     const newCrate = document.createElement("div");
-    let CrateCoordinates = crates.push(row)
+    CrateCoordinatesRow = crateRow.push(row);
+    CrateCoordinatesCol = crateCol.push(col);
 
     newCrate.className = "crate";
     newCrate.style.left = col * delta + "px";
@@ -94,8 +96,7 @@ function move(dRow, dCol) {
     const destCell = map[destRow][destCol];
 
     // Check if there is a crate there.
-    const crate = crates[destRow][destCol];
-
+    
     // STEP 2 -----------------------------------------------------------------/
     // For the maze, it was enough to check that the place the player wanted to
     // move was empty. Here, we want to check if the place that the player wants
@@ -110,15 +111,13 @@ function move(dRow, dCol) {
     // You will then need to move the player if the destination cell is empty.
     // Continue to STEP 3
 
+    
+
     if(destCell && destCell!== "W"){
         avatarCol += dCol
         avatarRow += dRow
         redrawAvatar()
     }
-    if(destCell === crate){
-        crate(destRow+dRow,destCol+dCol)
-    }
-
     checkForWin();
 }
 
