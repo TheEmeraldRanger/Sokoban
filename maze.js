@@ -96,7 +96,7 @@ function move(dRow, dCol) {
     const destCell = map[destRow][destCol];
 
     // Check if there is a crate there.
-    
+    const crates = map[crateRow][crateCol];
     // STEP 2 -----------------------------------------------------------------/
     // For the maze, it was enough to check that the place the player wanted to
     // move was empty. Here, we want to check if the place that the player wants
@@ -110,7 +110,6 @@ function move(dRow, dCol) {
     //
     // You will then need to move the player if the destination cell is empty.
     // Continue to STEP 3
-
 
     if(destCell && destCell!== "W"){
         avatarCol += dCol
