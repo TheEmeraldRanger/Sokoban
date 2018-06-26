@@ -21,7 +21,35 @@ const crates = [];
 //
 // Write a conditional that adds Xs to the "crateRow" variable but uses
 // an "O" class for the cell. "B"
-//
+
+for(var row=0; row<map.length; row++){
+    const rowVar = map[row];
+    const rowDiv = document.createElement("div");
+
+    rowDiv.className = "row";
+
+    for(var i=0; i<rowVar.length; i++){
+        let cellvar = rowVar[i];
+        const cellDiv = document.createElement("div");
+
+        cellDiv.className = "cell " + cellvar;
+
+        if(cellvar === "S"){
+            avatarRow = row;
+            avatarCol = i;
+        }
+        if(cellvar === "B"){
+            crate(row,i);
+        }
+        if(cellvar === "X"){
+            crate(row,i);
+            cellDiv.className = "cell O"
+        }
+        rowDiv.appendChild(cellDiv);
+    }
+    mazeDiv.appendChild(rowDiv)
+}
+
 // Your task is to write a for loop that draws the map, taking the above cell
 // types into consideration. Keep in mind that the player and boxes will be
 // absolutely positioned (so that they can be moved) and that you'll need to
@@ -38,6 +66,7 @@ const crates = [];
 // and positioning it at a specified row/column in the grid.
 function crate(row, col) {
     const newCrate = document.createElement("div");
+    let CrateCoordinates = crates.push(row)
 
     newCrate.className = "crate";
     newCrate.style.left = col * delta + "px";
@@ -80,6 +109,15 @@ function move(dRow, dCol) {
     //
     // You will then need to move the player if the destination cell is empty.
     // Continue to STEP 3
+
+    if(destCell && destCell!== "W"){
+        avatarCol += dCol
+        avatarRow += dRow
+        redrawAvatar()
+    }
+    if(destCell === crate){
+        crate(destRow+dRow,destCol+dCol)
+    }
 
     checkForWin();
 }
