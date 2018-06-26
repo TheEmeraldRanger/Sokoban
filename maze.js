@@ -111,7 +111,6 @@ function move(dRow, dCol) {
     // You will then need to move the player if the destination cell is empty.
     // Continue to STEP 3
 
-    
 
     if(destCell && destCell!== "W"){
         avatarCol += dCol
