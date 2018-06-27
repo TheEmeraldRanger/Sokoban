@@ -10,7 +10,7 @@ body {
     position: absolute; 
     width: 33px; 
     height: 33px; 
-    background: url('chok.png'); 
+    background: url('justahitmarker.jpeg'); 
     background-size: contain; 
     transition: all 0.1s;
 }
@@ -44,6 +44,7 @@ body {
 
 .W {
     background: #00356b;
+    background-size: contain;
 }
 
 .O {
@@ -58,7 +59,9 @@ body {
     width: 31px; 
     height: 31px; 
     margin: 1px; 
-    background: burlywood; 
+    border: 2px solid black;
     opacity: 0.7; 
     transition: all 0.1s;
+    background: url('Dorito.png');
+    background-size: contain;
 }
