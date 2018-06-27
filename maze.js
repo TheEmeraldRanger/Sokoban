@@ -7,12 +7,22 @@ const youWonDiv = document.getElementById("youWonDiv")
 const delta = 33;
 
 // Coordinates of the player's avatar.
-let avatarRow; 
+let avatarRow;
 let avatarCol;
 
 // Separate array for keeping track of the moving crates.
-const crateRow = [];
-const crateCol = [];
+const crateRow = []
+/*CrateRow = [0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0],
+[0, "div.crate", 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, "div.crate", 0, 0],
+[0, "div.crate", 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, "div.crate", 0, 0, 0],
+[0, 0, 0, "div.crate", 0, 0, "div.crate", 0],
+[0, 0, 0, 0, "div.crate", 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0]
+*/
+const crates = [];
 
 // START HERE -----------------------------------------------------------------/
 // While the maze project only kept track of (W)alls, the player's
@@ -23,32 +33,56 @@ const crateCol = [];
 // Write a conditional that adds Xs to the "crateRow" variable but uses
 // an "O" class for the cell. "B"
 
-for(var row=0; row<map.length; row++){
+for (var row = 0; row < map.length; row++) {
     const rowVar = map[row];
     const rowDiv = document.createElement("div");
+    var crateMapR = [];
+    var crateMapR2 = [];
 
-    rowDiv.className = "row";
+    rowDiv.className = "row " + row;
 
-    for(var i=0; i<rowVar.length; i++){
+    for (var i = 0; i < rowVar.length; i++) {
         let cellvar = rowVar[i];
         const cellDiv = document.createElement("div");
+        var crateMapC = 0
+        var crateMapC2 = 0
 
         cellDiv.className = "cell " + cellvar;
 
-        if(cellvar === "S"){
+        if (cellvar === "S") {
             avatarRow = row;
             avatarCol = i;
         }
-        if(cellvar === "B"){
-            crate(row,i);
+        if (cellvar === "B") {
+            crateMapC = crate(row, i)
         }
-        if(cellvar === "X"){
-            crate(row,i);
+        if (cellvar === "X") {
             cellDiv.className = "cell O"
+            crateMapC = crate(row, i)
+            crateMapC2 = "F"
+        }
+        if (cellvar === "O") {
+            crateMapC2 = "F"
         }
         rowDiv.appendChild(cellDiv);
+        moar = crateMapR.push(crateMapC);
+        evenMoar = crateMapR2.push(crateMapC2);
     }
-    mazeDiv.appendChild(rowDiv)
+    mazeDiv.appendChild(rowDiv);
+    moar2 = crates.push(crateMapR);
+    evenMoar2 = crateRow.push(crateMapR2)
+    console.log("crates Row " + row+ " contains " + crateMapR);
+}
+
+var finishConditions = 0;
+
+for(var j = 0; j < crateRow.length; j++){
+    var fCCheck = crateRow[j];
+    for(var k = 0; k < fCCheck.length; k++){
+        if(crateRow[j][k] === 0){
+            finishConditions = finishConditions + 1;
+        }
+    }
 }
 
 // Your task is to write a for loop that draws the map, taking the above cell
@@ -67,8 +101,6 @@ for(var row=0; row<map.length; row++){
 // and positioning it at a specified row/column in the grid.
 function crate(row, col) {
     const newCrate = document.createElement("div");
-    CrateCoordinatesRow = crateRow.push(row);
-    CrateCoordinatesCol = crateCol.push(col);
 
     newCrate.className = "crate";
     newCrate.style.left = col * delta + "px";
@@ -94,9 +126,14 @@ function move(dRow, dCol) {
     const destRow = avatarRow + dRow;
     const destCol = avatarCol + dCol;
     const destCell = map[destRow][destCol];
+    console.log(destCell)
 
     // Check if there is a crate there.
-    const crates = map[crateRow][crateCol];
+    const crateCheck = crates[destRow][destCol];
+    // console.log(crates)
+    // console.log(crateCheck)
+    console.log(map[destRow][destCell])
+
     // STEP 2 -----------------------------------------------------------------/
     // For the maze, it was enough to check that the place the player wanted to
     // move was empty. Here, we want to check if the place that the player wants
@@ -111,7 +148,30 @@ function move(dRow, dCol) {
     // You will then need to move the player if the destination cell is empty.
     // Continue to STEP 3
 
-    if(destCell && destCell!== "W"){
+    if (crateCheck !== 0) {
+        const crateDestRow = destRow + dRow;
+        const crateDestCol = destCol + dCol;
+        if(map[crateDestRow][crateDestCol] !== "W" && crates[crateDestRow][crateDestCol] === 0){
+            //crates[destRow][destCol] = 0
+            //crates[crateDestRow][crateDestCol] = "box"
+            crates[crateDestRow][crateDestCol] = crates[destRow][destCol]
+            crates[destRow][destCol] = 0
+            // crate(crateDestRow,crateDestCol)
+
+            // newCrate.className = "crate";
+            crates[crateDestRow][crateDestCol].style.left = crateDestCol * delta + "px";
+            crates[crateDestRow][crateDestCol].style.top = crateDestRow * delta + "px";
+
+            console.log(map[destRow][destCol])
+        }
+        //mazeDiv.removeChild()
+
+        //crates[crateDestRow][crateDestCol] = crate;
+        //crate.style.top = crateDestRow * delta + "px";
+        //crate.style.left = crateDestCol * delta + "px";
+    }
+
+    if (destCell && destCell !== "W" && crates[destRow][destCol] === 0) {
         avatarCol += dCol
         avatarRow += dRow
         redrawAvatar()
@@ -123,22 +183,35 @@ function checkForWin() {
     // STEP 3 -----------------------------------------------------------------/
     // Write a function that checks if the player won. A player wins when all
     // boxes are moved over all storage spaces.
-    youWonDiv.classList.remove("hidden");
+    AoZ = 0
+    for(var c = 0; c<crateRow.length; c++){
+        gameCheck = crateRow[c]
+        for(var cc = 0; cc< gameCheck.length; cc++){
+        if(crateRow[c][cc] === crates[c][cc]){
+            AoZ = AoZ + 1
+        }
+    }
+    if(AoZ === finishConditions){
+        youWonDiv.classList.remove("hidden");
+    }
+    }
+    console.log("Aoz = " + AoZ)
+    console.log("FC = " + finishConditions)
 }
 
 document.addEventListener('keydown', (event) => {
-    switch(event.key) {
+    switch (event.key) {
         case "ArrowDown":
-            move(1,0);
+            move(1, 0);
             break;
         case "ArrowUp":
-            move(-1,0);
+            move(-1, 0);
             break;
         case "ArrowLeft":
-            move(0,-1);
+            move(0, -1);
             break;
         case "ArrowRight":
-            move(0,1);
+            move(0, 1);
             break;
         default:
             console.log('keydown event\n\nkey: ' + event.key);

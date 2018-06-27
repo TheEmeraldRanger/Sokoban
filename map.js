@@ -10,9 +10,9 @@ const map = [
     "WWWWWWWW"
 ];
 
-/* Alternate map
+//Alternate map
 
-const map = [
+/*const map = [
    "    WWWWW          ",
    "    W   W          ",
    "    WB  W          ",
